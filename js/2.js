@@ -1,6 +1,8 @@
 import $ from 'jquery';
 import { createStore } from 'redux';
 
+// http://redux.js.org/docs/recipes/reducers/ImmutableUpdatePatterns.html
+
 const initialTodo = [
   { id: 1, text: 'Counter', status: 'COMPLETED' },
   { id: 2, text: 'Greeting', status: 'COMPLETED' },
@@ -33,7 +35,10 @@ function renderTodo(todo) {
 }
 
 function renderList(state) {
-  console.log(state);
+  state.sort(function (a, b) {
+    return (a.id - b.id);
+  });
+
   const liElements = state.map(todo => renderTodo(todo));
   $('#todoList').html(liElements);
 }
@@ -91,10 +96,6 @@ const reducerTodo = (state, action) => {
   }
 
   if (action.type === 'REMOVE') {
-    // const newState = [
-    //   ...state.slice(0, action.id),
-    //   ...state.slice(action.id + 1),
-    // ];
     const newState = state.filter(element => element.id !== action.id);
 
     return newState;

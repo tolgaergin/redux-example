@@ -65,6 +65,8 @@
 	
 	function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
 	
+	// http://redux.js.org/docs/recipes/reducers/ImmutableUpdatePatterns.html
+	
 	var initialTodo = [{ id: 1, text: 'Counter', status: 'COMPLETED' }, { id: 2, text: 'Greeting', status: 'COMPLETED' }, { id: 3, text: 'Weather', status: 'ACTIVE' }, { id: 4, text: 'TODO', status: 'ACTIVE' }];
 	
 	var todoLength = initialTodo.length + 1;
@@ -83,7 +85,10 @@
 	}
 	
 	function renderList(state) {
-	  console.log(state);
+	  state.sort(function (a, b) {
+	    return a.id - b.id;
+	  });
+	
 	  var liElements = state.map(function (todo) {
 	    return renderTodo(todo);
 	  });
@@ -142,10 +147,6 @@
 	  }
 	
 	  if (action.type === 'REMOVE') {
-	    // const newState = [
-	    //   ...state.slice(0, action.id),
-	    //   ...state.slice(action.id + 1),
-	    // ];
 	    var newState = state.filter(function (element) {
 	      return element.id !== action.id;
 	    });
